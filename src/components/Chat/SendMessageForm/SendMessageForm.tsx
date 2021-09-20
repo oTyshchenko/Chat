@@ -4,12 +4,13 @@ import { IMessage } from "../../../types/types";
 import currentUser from "../../../store/currentUser";
 import currentCompanion from "../../../store/currentCompanion";
 import messages from "../../../store/messages";
+import newMessageFrom from "../../../store/newMessageFrom";
 import newMessageIndicator from '../../../store/newMessageIndicator'
 import { horizontalLine, socket } from '../../../constants/constants';
 import { ifEnterPressDo } from "../../../utils/ifEnterPressDo";
 
 export const SendMessageForm: FC = () => {
-  
+
   const classes = useStyles();
 
   const [newMessage, setNewMessage] = useState<string>("");
@@ -29,6 +30,7 @@ export const SendMessageForm: FC = () => {
         to: currentCompanion.currentCompanion
       });
       setNewMessage("");
+      newMessageFrom.removeUserFromList(currentCompanion.currentCompanion.id)
     }
   };
 
@@ -40,13 +42,18 @@ export const SendMessageForm: FC = () => {
       ) {
         messages.addMessage({
           id: Math.random(),
-          sender: {id: horizontalLine, userName: horizontalLine},
+          sender: { id: horizontalLine, userName: horizontalLine },
           messageText: horizontalLine,
           to: currentCompanion.currentCompanion
         });
         newMessageIndicator.setIsNewMessageIndicatorExist(true);
       }
       messages.addMessage(message);
+      if (message.to.id === '1') {
+        newMessageFrom.addUserToList('1')
+      } else {
+        newMessageFrom.addUserToList(message.sender.id)
+      }
     });
   }, []);
 

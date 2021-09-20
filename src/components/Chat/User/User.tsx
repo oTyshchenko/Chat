@@ -2,6 +2,7 @@ import { Box, makeStyles } from '@material-ui/core'
 import React, { FC } from 'react'
 import { IUser } from '../../../types/types'
 import currentCompanion from "../../../store/currentCompanion"
+import newMessageFrom from "../../../store/newMessageFrom"
 import { observer } from 'mobx-react-lite'
 
 interface UserProps {
@@ -13,6 +14,7 @@ export const User: FC<UserProps> = observer(({ user }) => {
 
     const changeCurrentCompanion = (user: IUser) => {
         currentCompanion.changeCurrentCompanion(user);
+        newMessageFrom.removeUserFromList(user.id);
     }
 
     return (
@@ -20,7 +22,8 @@ export const User: FC<UserProps> = observer(({ user }) => {
             className={(currentCompanion.currentCompanion.id === user.id) ? `${classes.userName} ${classes.currentCompanion}` : classes.userName}
             onClick={() => changeCurrentCompanion(user)}
         >
-            {user.userName}
+            <Box>{user.userName}</Box>
+            <Box className={classes.newMessageIcon}>{newMessageFrom.users.includes(user.id) ? 'new' : ''}</Box>
         </Box>
     )
 })
@@ -28,7 +31,7 @@ export const User: FC<UserProps> = observer(({ user }) => {
 const useStyles = makeStyles(() => ({
     userName: {
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "center",
         padding: "10px",
         marginBottom: "10px",
@@ -37,5 +40,8 @@ const useStyles = makeStyles(() => ({
     },
     currentCompanion: {
         background: "rgb(255, 213, 27)"
+    },
+    newMessageIcon: {
+        background: 'pink'
     }
 }));

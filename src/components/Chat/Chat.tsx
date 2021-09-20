@@ -17,7 +17,7 @@ export const Chat: FC = observer(() => {
     activeUsers.updateActiveUsers(activeUsersFromServer)
   })
 
-  const usersToRender = activeUsers.activeUsers.filter((user) => user.id !== currentUser.currentUser.id)
+  const usersToRender = activeUsers.activeUsers.filter((user) => user.id !== currentUser.currentUser.id)  
 
   return (
     <Box className={classes.chat}>
